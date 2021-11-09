@@ -32,9 +32,7 @@ def merge(a,nohttps):
     for i in a:
         if i.startswith("/"):
             nohttps.append('https://hello.com'+i)
-        else:
-            print('fuck the world')
-                
+            print(i)                
 
 if __name__ == '__main__':
     boom = requests.get("https://stackoverflow.com/questions/1918270/python-lists-append-return-value").text
