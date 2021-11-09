@@ -28,12 +28,12 @@ def removedub(bew,w,x):
     return w
 
 #filter the hipper link and merage the domain url 
-def merge(a):
+def merge(a,nohttps):
     for i in a:
-        for a
-            if i.startswith("/"):
-                a.append('https://hello.com'+i)
-                return a.remove(i)
+        for n in i:
+            if n.startswith("/"):
+                a.append('https://hello.com'+n)
+                return nohttps.remove(n)
 
 if __name__ == '__main__':
     boom = requests.get("https://stackoverflow.com/questions/1918270/python-lists-append-return-value").text
@@ -43,5 +43,6 @@ if __name__ == '__main__':
    # print(bew) 
     url1(boom,w)
     removedub(bew,w,x)
-    print(merge(w))
+    merge(w,nohttps)
+    print(nohttps)
     #lol
