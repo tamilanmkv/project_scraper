@@ -25,24 +25,26 @@ def spli(bew,lol):
 def removedub(bew,w,x):
     dubs = bew+x
     f = list(set(dubs))
-    return w
+    return x
 
 #filter the hipper link and merage the domain url 
 def merge(a,nohttps):
     for i in a:
-        for n in i:
-            if n.startswith("/"):
-                a.append('https://hello.com'+n)
-                return nohttps.remove(n)
+        if i.startswith("/"):
+            nohttps.append('https://hello.com'+i)
+        else:
+            print('fuck the world')
+                
 
 if __name__ == '__main__':
     boom = requests.get("https://stackoverflow.com/questions/1918270/python-lists-append-return-value").text
     #print(url1(boom))
     soup = BeautifulSoup(boom, 'html.parser')
-    spli(x,soup)
+    spli(bew,soup)
    # print(bew) 
     url1(boom,w)
     removedub(bew,w,x)
-    merge(w,nohttps)
+    merge(bew,nohttps)
     print(nohttps)
-    #lol
+    
+       #lol
