@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 
 bew = []
 w = []
+nohttps=[]
 #fileter urls with regex
 def url1(bundle,x):
     ex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
@@ -19,11 +20,6 @@ def spli(bew,lol):
         bew.append(link.get('href'))
     return bew
 
-##add the hipper links into join the domain name
-def withouthttp(soup):
-    #print(url1(soup))
-    return 0
-
 #map data structure to remove dublicates from array
 def removedub(bew,w):
     def Convert(a):
@@ -32,11 +28,11 @@ def removedub(bew,w):
         return res_dct
     dubs = bew+w
     dubs = list(dict.fromkeys(Convert(dubs)))
-    return dubs
+    return w.append(dubs)
 
 #filter the hipper link and merage the domain url 
-def merge():
-    
+#def merge():
+    #filter=[x[] for i in ]
 
 if __name__ == '__main__':
     boom = requests.get("https://stackoverflow.com/questions/1918270/python-lists-append-return-value").text
@@ -45,7 +41,7 @@ if __name__ == '__main__':
     spli(bew,soup)
    # print(bew) 
     url1(boom,w)
-    print(removedub(bew,w))
+    removedub(bew,w)
+    print(w)
 
-
-    #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
+    #lol
