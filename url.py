@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 
 bew = []
 w = []
+x=[]
 nohttps=[]
 #fileter urls with regex
 def url1(bundle,x):
@@ -21,27 +22,26 @@ def spli(bew,lol):
     return bew
 
 #map data structure to remove dublicates from array
-def removedub(bew,w):
-    def Convert(a):
-        it = iter(a)
-        res_dct = dict(zip(it, it))
-        return res_dct
-    dubs = bew+w
-    dubs = list(dict.fromkeys(Convert(dubs)))
-    return w.append(dubs)
+def removedub(bew,w,x):
+    dubs = bew+x
+    f = list(set(dubs))
+    return w
 
 #filter the hipper link and merage the domain url 
-#def merge():
-    #filter=[x[] for i in ]
+def merge(a):
+    for i in a:
+        for a
+            if i.startswith("/"):
+                a.append('https://hello.com'+i)
+                return a.remove(i)
 
 if __name__ == '__main__':
     boom = requests.get("https://stackoverflow.com/questions/1918270/python-lists-append-return-value").text
     #print(url1(boom))
     soup = BeautifulSoup(boom, 'html.parser')
-    spli(bew,soup)
+    spli(x,soup)
    # print(bew) 
     url1(boom,w)
-    removedub(bew,w)
-    print(w)
-
+    removedub(bew,w,x)
+    print(merge(w))
     #lol
