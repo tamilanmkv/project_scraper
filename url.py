@@ -10,7 +10,6 @@ regex_urls = list() #w = [] #url1 functions output
 merged_urls=list() #x=[]
 
 
-
 #fileter urls with regex
 def url1(bundle,regex_urls):
     ex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
