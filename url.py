@@ -4,11 +4,13 @@ import re
 import requests
 from bs4 import BeautifulSoup
 import numpy as np
+from urllib.parse import urlparse
 
 split_urls = list() #bew = [] #spli functions output #spli functions output
 regex_urls = list() #w = [] #url1 functions output
 merged_urls=list() #x=[]
-
+internal_links=set()
+external_links=set()
 
 #fileter urls with regex
 def url1(bundle,regex_urls):
@@ -31,26 +33,31 @@ def removedub(split_urls,merged_urls,regex_urls):
 
 #filter the hipper link and merage the domain url 
 def merge(merged_urls,domain,lol):
-    ar=list()
     for link in lol.find_all('base'):
         baseurl=link.get('href')
         if baseurl.count('base') > 0:
             for i in np.hstack(merged_urls):
                 if str(i).startswith("/"):
-                    ar.append(baseurl+i)
-                    return merged_urls
+                    merged_urls.add(baseurl+i)
     else:
         for i in np.hstack(merged_urls):
             if str(i).startswith("/"):
-                merged_urls.append(f"https://{domain}"+i)
-           
+                merged_urls.add(f"https://{domain}"+i)
+    
+#only matched domain loops and subdomains multi links
+def loops(inp,oup):
+    with open('/tmp/domins.txt') as f:
+    for i in f:
+        
+        
+
 if __name__ == '__main__':
-    domain="stackoverflow.com"
+    domain="hackerone.com"
     boom = requests.get(f"https://{domain}/").text
     soup = BeautifulSoup(boom, 'html.parser')
     spli(split_urls,soup)
     url1(boom,regex_urls)
     removedub(split_urls,merged_urls,regex_urls)
-    merge(merged_urls,domain,soup)
-    print(regex_urls)
+    merge(merged_urls,domain,soup) 
+    loops(merged_urls,internal_links)
        #litle
