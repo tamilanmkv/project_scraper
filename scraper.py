@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 import json
 
-
+total_urls_visited=0
 merged_urls=set() #x=[]
 internal_links=set()
 external_links=set()
@@ -12,7 +12,7 @@ subdomains=set()
 cookies=dict()
 hipper=set()
 
-with open('/tmp/domains.txt') as f:
+with open('domains.txt') as f:
     for i in f:
         subdomains.add(i.strip('\n'))
 #with open('/tmp/cookie.json') as c: 
@@ -45,10 +45,22 @@ def merge(lol):
                 merged_urls.add(f"https://{domain}"+i)
             
 
-def loops():
+def loops(log=merged_urls): 
+    logs=set()
+    dub=set()
+    for  i in merged_urls.copy():
+        logs.add(i)
+        for x in internal_links, external_links:
+            dub.update(x)
+            for j in dub:
+                if i == x:
+                    logs.discard(x)
+                else:
+                    print(i)
+    print(logs)
     for i in subdomains:
-        for x in merged_urls.copy():
-            #print(urlparse(x).netloc)
+        for x in logs:
+            log.add(x)
             if urlparse(x).netloc == str(i.strip()):
                 internal_links.add(x)
                 r = requests.get(x,cookies).text
@@ -58,9 +70,16 @@ def loops():
                 merge(b)
             elif urlparse(x).netloc != str(i.strip()):
                 external_links.add(x)
-            
-#    while internal_links:
-                
+    return logs
+
+def scrap(max_count=1000):
+    global total_urls_visited
+    total_urls_visited += 1
+    urls = loops()
+    for link in merged_urls:
+        if total_urls_visited > max_count:
+            break
+        scrap() 
 if __name__ == '__main__':
     domain="hackerone.com"
     boom = requests.get(f"https://{domain}/").text
@@ -68,6 +87,4 @@ if __name__ == '__main__':
     spli(soup)
     merge(soup)
     url1(boom)
-    loops()
-
-    
+    scrap()
