@@ -58,10 +58,14 @@ def merge(lol):
             
 #loop the process 
 thavaiillatha_onions=set()
-def loops(logs):
+def loops():
+    logs = merged_urls.copy()
+    if len(internal_links) > 0:
+        for k in internal_links:
+            if k in logs:
+               return logs.remove(k) 
     for i in subdomains:
-        for x in logs.copy():
-            print("\n\n\n",x)
+        for x in logs:    
             if urlparse(x).netloc == i:
                 for j in extern('image'):
                     ex_path= urlparse(x).path
@@ -74,24 +78,20 @@ def loops(logs):
                     spli(b)
                     merge(b) 
                     print(x)
-                    internal_links.add(x)
+                    internal_links.add(x) 
             elif urlparse(x).netloc != str(i.strip()):
                 external_links.add(x)
-
+    return loops()
 #    while internal_links:
 
 #condition the link
 def scrap(max_count=1000):
     global total_urls_visited
     total_urls_visited += 1
-    if len(internal_links) > 0:
-        loops(internal_links)
-    else:
-        loops(merged_urls)
+    loops()
     for i in range(len(internal_links)):
         if total_urls_visited > max_count:
-            break
-    scrap() 
+            break 
                
 if __name__ == '__main__':
     domain="hackerone.com"
@@ -101,3 +101,4 @@ if __name__ == '__main__':
     merge(soup)
     url1(boom)
     scrap()    
+    print(internal_links)
