@@ -1,0 +1,53 @@
+[
+    {
+        "domain": "hackerone.com",
+        "expirationDate": 1637975307.06618,
+        "hostOnly": true,
+        "httpOnly": true,
+        "name": "__Host-session",
+        "path": "/",
+        "sameSite": "no_restriction",
+        "secure": true,
+        "session": false,
+        "storeId": null,
+        "value": "K3RnaE9YTXFZUmFxaytGV21VdHFpQ2NZUFVEaHJoeVZURDBxS0VsRk9MYU9XUVFscjkyeGNNY285RU1XNzZuR3RLOGFicHVkbUZUM0hUOVdBcDZwcjlNeDMxc3VRWWVleEFSdnBINm43RVNnMGVFSGRVam14MnVuVnhvZlJKaHNpNXllYVN6U2dxbDFvUkh3UEEvQlU4ZEFlRHV3Ni9LSiswQkRFWUxsanUvK0J3YnNHT0dWdXZSYlU2dnpCYVMwUWtnb3dONE9rZFZyUjJBeHozL0FNTU5sMC93RUg2NWY3ZnJuL0JDdzJlS2J5WGlTWDZIVzVoVGZ6dFNhamlENzV1bGhQOTEvU1VuOEpMVHJDWGl2SFhYTytUb0Z4REVvMUp6QlZtZ045WE1Vd0E1b2FTZzhYUGtkbTNscVlicjNwc2t5U1hNZmxzajZxb0RZMm5uSGhrbyt0T0JMRVhlWnZJVTFsa3lXdnM2ZzdPVWlYKzluWW42b2FKbE5GNk15K1lzRWRqMlltOFZmUjM0TWZBL0o0ZGxjYUpHM1R5M3RSdDFWYlpBNElFdFR0UlVKMWRybWtSV3BxcDRkSUV0VEhvVkxCd25LNWRiZkpnTkNIa1IzcjdIVklibkhJUXhlV2NlZTZjRG9HTnZ4aUhUWEtYNGNIRUZxZGdmM2JiMlFHZE9XQnQyQS9RZHdTbHJBZ3pMeGF1ckZNbkxDdE9Za0xCcEYwMlQ1TXhxN0lqS2xSeENiWGN3T1daVmFBU1dHL1RaY0ZkL3pYT3crYkxmV1JpMHh1cXQzM0lycGtmUHJwTnBtUjExSk04a1hiUWRlMmplTEJHa0RZd2UvbmQwOS0tZmtQc1o4UWpOV1l6bzBGNHZIaVRPZz09--97ea3373e4fe4f79e736adfaebb90a0a40745bd7"
+    },
+    {
+        "domain": ".hackerone.com",
+        "expirationDate": 1637975295.055008,
+        "hostOnly": false,
+        "httpOnly": false,
+        "name": "app_signed_in",
+        "path": "/",
+        "sameSite": "no_restriction",
+        "secure": true,
+        "session": false,
+        "storeId": null,
+        "value": "true"
+    },
+    {
+        "domain": ".hackerone.com",
+        "hostOnly": false,
+        "httpOnly": false,
+        "name": "_sourceCookie",
+        "path": "/",
+        "sameSite": null,
+        "secure": false,
+        "session": true,
+        "storeId": null,
+        "value": "%7B%22_mkto_content%22%3A%22%22%2C%22_mkto_campaign%22%3A%22%22%2C%22_webReferrer%22%3A%22Direct%22%7D"
+    },
+    {
+        "domain": "hackerone.com",
+        "expirationDate": 1650088261.327139,
+        "hostOnly": true,
+        "httpOnly": true,
+        "name": "h1_device_id",
+        "path": "/",
+        "sameSite": "no_restriction",
+        "secure": true,
+        "session": false,
+        "storeId": null,
+        "value": "c15459b8-2453-4471-a4f4-2f456e007319"
+    }
+]
