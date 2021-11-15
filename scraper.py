@@ -40,22 +40,27 @@ def merge(lol):
                     merged_urls.add(baseurl+i)
                     
     else:
-        for i in hipper:
+        for i in hipper.copy():
             if str(i).startswith("/"):
                 merged_urls.add(f"https://{domain}"+i)
             
 
 def loops():
-    for i,x in zip(subdomains,merged_urls.copy()):
-        if urlparse(x).netloc == str(i): 
-                       
-            internal_links.add(x)
-            r = requests.get(x,cookies).text
-            b = BeautifulSoup(r, 'html.parser')
-            url1(r)
-            spli(b)
-            merge(b)
-
+    for i in subdomains:
+        for x in merged_urls.copy():
+            #print(urlparse(x).netloc)
+            if urlparse(x).netloc == str(i.strip()):
+                internal_links.add(x)
+                r = requests.get(x,cookies).text
+                b = BeautifulSoup(r, 'html.parser')
+                url1(r)
+                spli(b)
+                merge(b)
+            elif urlparse(x).netloc != str(i.strip()):
+                external_links.add(x)
+            
+#    while internal_links:
+                
 if __name__ == '__main__':
     domain="hackerone.com"
     boom = requests.get(f"https://{domain}/").text
@@ -64,5 +69,5 @@ if __name__ == '__main__':
     merge(soup)
     url1(boom)
     loops()
-    print(merged_urls)
+
     
