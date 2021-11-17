@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 import json
 import mimetypes
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 merged_urls=set() #x=[]
 internal_links=set()
@@ -55,10 +56,17 @@ def merge(lol):
         for i in hipper.copy():
             if str(i).startswith("/"):
                 merged_urls.add(f"https://{domain}"+i)
-            
+
+def colec(x):
+    return requests.get(x,cookies).text      
+def bef(r):
+    b=BeautifulSoup(r, 'html.parser')
+    spli(b)
+    merge(b)
+    return r
 #loop the process 
 thavaiillatha_onions=set()
-def loops(logs,internal_links,external_links):
+def loops(logs):
     logs = merged_urls.copy()
     if len(internal_links) > 0:
         for k in internal_links:
@@ -71,27 +79,30 @@ def loops(logs,internal_links,external_links):
                 ex_path= urlparse(x).path
                 if ex_path.endswith(j) and ex_path.endswith('.pdf'):
                     thavaiillatha_onions.add(x)
-            else:
-                r = requests.get(x,cookies).text
-                b = BeautifulSoup(r, 'html.parser')
-                url1(r)
-                spli(b)
-                merge(b)
-                print(x) 
-                internal_links.add(x) 
-        elif str(k) not in subdomains:
-            external_links.add(x)
-    return loops(logs,internal_links,external_links) 
+    cop =set()
+    with ThreadPoolExecutor(max_workers=30) as executor:
+        for x in logs:
+            if str(urlparse(x).netloc) in subdomains and str(x) not in thavaiillatha_onions:
+                cop.add(executor.submit(colec, x))
+    for r in as_completed(cop): 
+        url1(r.result())
+        bef(r.result())
+    for x in logs:
+        if str(urlparse(x).netloc) in subdomains and str(x) not in thavaiillatha_onions:
+            print(x)
+            internal_links.add(x) 
+    #elif str(k) not in subdomains:
+        #external_links.add(x)
+    return logs
 #    while internal_links:
 
 #condition the link
 def scrap(max_count=1000):
     global total_urls_visited
     total_urls_visited += 1
-    loops(merged_urls,internal_links,external_links)
-    for i in range(len(internal_links)):
-        if total_urls_visited > max_count:
-            break 
+    while max_count > 0:
+        loops(merged_urls)
+        max_count -=1
                
 if __name__ == '__main__':
     domain="hackerone.com"
@@ -101,4 +112,5 @@ if __name__ == '__main__':
     merge(soup)
     url1(boom)
     scrap()    
+
 
