@@ -12,13 +12,13 @@ subdomains=set()
 cookies=dict()
 hipper=set()
 
-with open('/tmp/domains.txt') as f:
+with open('domains.txt') as f:
     for i in f:
         subdomains.add(i.strip('\n'))
-#with open('/tmp/cookie.json') as c: 
-#    for i in json.loads(c.read()):
-#        cookies.update(i)
-#        break
+with open('cookie.json') as c: 
+    for i in json.loads(c.read()):
+        cookies.update(i)
+        break
 
 def url1(bundle):
     ex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
@@ -38,7 +38,7 @@ def merge(lol):
             for i in hipper:
                 if str(i).startswith("/"):
                     merged_urls.add(baseurl+i)
-                    
+
     else:
         for i in hipper.copy():
             if str(i).startswith("/"):
@@ -46,19 +46,22 @@ def merge(lol):
             
 
 def loops():
+    logs= merged_urls.copy()
     for i in subdomains:
-        for x in merged_urls.copy():
+        for x in logs:
             #print(urlparse(x).netloc)
             if urlparse(x).netloc == str(i.strip()):
+                print(merged_urls)
                 internal_links.add(x)
                 r = requests.get(x,cookies).text
                 b = BeautifulSoup(r, 'html.parser')
                 url1(r)
                 spli(b)
                 merge(b)
+                print(x)
             elif urlparse(x).netloc != str(i.strip()):
                 external_links.add(x)
-            
+    return loops()
 #    while internal_links:
                 
 if __name__ == '__main__':
@@ -69,5 +72,5 @@ if __name__ == '__main__':
     merge(soup)
     url1(boom)
     loops()
-
+    print(internal_links)
     
