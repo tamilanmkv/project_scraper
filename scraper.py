@@ -21,13 +21,14 @@ with open('cookie.json') as c:
     for i in json.loads(c.read()):
         cookies.update(i)
         break
-def extern(*types):
+
+#all unknow extentions
+def extern(types):
     for ext in mimetypes.types_map:
-        print(ext)
         if mimetypes.types_map[ext].split('/')[0] == types:
             yield ext
 
-
+#regext the urls
 def url1(bundle):
     ex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
     url = re.findall(ex,bundle)
@@ -35,10 +36,12 @@ def url1(bundle):
     merged_urls.update(set(k))
     return merged_urls
 
+#hipper link collections
 def spli(lol):
     for link in lol.find_all('a'):
         hipper.add(link.get('href'))
 
+#if base tag is available or add the domain to hipper link
 def merge(lol):
     for link in lol.find_all('base'):
         baseurl=link.get('href')
@@ -52,29 +55,38 @@ def merge(lol):
             if str(i).startswith("/"):
                 merged_urls.add(f"https://{domain}"+i)
             
-
-def loops(logs=merged_urls):
+#loop the process 
+thavaiillatha_onions=set()
+def loops(logs):
+    logs=list(logs)
     for i in subdomains:
         for x in logs:
-            #print(urlparse(x).netloc)
-            if urlparse(x).netloc == str(i.strip()):
-                internal_links.add(x)
-                r = requests.get(x,cookies).text
-                b = BeautifulSoup(r, 'html.parser')
-                url1(r)
-                spli(b)
-                merge(b)
-                print(x)
+            if urlparse(x).netloc in str(i.strip()):
+                for j in extern('image'):
+                    ex_path= urlparse(x).path
+                    if ex_path.endswith(j) or ex_path.endswith('.pdf'):
+                        thavaiillatha_onions.add(x)
+                else:
+                    internal_links.add(x)
+                    r = requests.get(x,cookies).text
+                    b = BeautifulSoup(r, 'html.parser')
+                    url1(r)
+                    spli(b)
+                    merge(b)
+                    print(x)
             elif urlparse(x).netloc != str(i.strip()):
                 external_links.add(x)
-    return loops()
+    return logs
 #    while internal_links:
 
+#condition the link
 def scrap(max_count=1000):
     global total_urls_visited
     total_urls_visited += 1
-    urls = loops()
-    
+    if len(internal_links) > 0:
+        loops(internal_links)
+    else:
+        loops(merged_urls)
     for link in merged_urls:
         if total_urls_visited > max_count:
             break
