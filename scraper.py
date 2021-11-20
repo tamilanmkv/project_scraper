@@ -3,7 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 import json
-
+import mimetypes
 
 merged_urls=set() #x=[]
 internal_links=set()
@@ -19,6 +19,12 @@ with open('cookie.json') as c:
     for i in json.loads(c.read()):
         cookies.update(i)
         break
+def extern(*types):
+    for ext in mimetypes.types_map:
+        print(ext)
+        if mimetypes.types_map[ext].split('/')[0] == types:
+            yield ext
+
 
 def url1(bundle):
     ex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
@@ -45,13 +51,11 @@ def merge(lol):
                 merged_urls.add(f"https://{domain}"+i)
             
 
-def loops():
-    logs= merged_urls.copy()
+def loops(logs=merged_urls):
     for i in subdomains:
         for x in logs:
             #print(urlparse(x).netloc)
             if urlparse(x).netloc == str(i.strip()):
-                print(merged_urls)
                 internal_links.add(x)
                 r = requests.get(x,cookies).text
                 b = BeautifulSoup(r, 'html.parser')
