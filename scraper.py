@@ -11,6 +11,8 @@ external_links=set()
 subdomains=set()
 cookies=dict()
 hipper=set()
+total_urls_visited=0
+
 
 with open('domains.txt') as f:
     for i in f:
@@ -67,7 +69,17 @@ def loops(logs=merged_urls):
                 external_links.add(x)
     return loops()
 #    while internal_links:
-                
+
+def scrap(max_count=1000):
+    global total_urls_visited
+    total_urls_visited += 1
+    urls = loops()
+    
+    for link in merged_urls:
+        if total_urls_visited > max_count:
+            break
+        scrap() 
+               
 if __name__ == '__main__':
     domain="hackerone.com"
     boom = requests.get(f"https://{domain}/").text
@@ -75,6 +87,4 @@ if __name__ == '__main__':
     spli(soup)
     merge(soup)
     url1(boom)
-    loops()
-    print(internal_links)
-    
+    scrap()    
