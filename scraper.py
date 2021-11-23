@@ -58,37 +58,37 @@ def merge(lol):
             
 #loop the process 
 thavaiillatha_onions=set()
-def loops():
+def loops(logs,internal_links,external_links):
     logs = merged_urls.copy()
     if len(internal_links) > 0:
         for k in internal_links:
-            if k in logs:
-               return logs.remove(k) 
-    for i in subdomains:
-        for x in logs:    
-            if urlparse(x).netloc == i:
-                for j in extern('image'):
-                    ex_path= urlparse(x).path
-                    if ex_path.endswith(j) and ex_path.endswith('.pdf'):
-                        thavaiillatha_onions.add(x)
-                else:
-                    r = requests.get(x,cookies).text
-                    b = BeautifulSoup(r, 'html.parser')
-                    url1(r)
-                    spli(b)
-                    merge(b) 
-                    print(x)
-                    internal_links.add(x) 
-            elif urlparse(x).netloc != str(i.strip()):
-                external_links.add(x)
-    return loops()
+            if str(k) in logs:
+                logs.remove(k)
+    for x in logs:    
+        k = urlparse(x).netloc
+        if str(k) in subdomains:
+            for j in extern('image'):
+                ex_path= urlparse(x).path
+                if ex_path.endswith(j) and ex_path.endswith('.pdf'):
+                    thavaiillatha_onions.add(x)
+            else:
+                r = requests.get(x,cookies).text
+                b = BeautifulSoup(r, 'html.parser')
+                url1(r)
+                spli(b)
+                merge(b)
+                print(x) 
+                internal_links.add(x) 
+        elif str(k) not in subdomains:
+            external_links.add(x)
+    return loops(logs,internal_links,external_links) 
 #    while internal_links:
 
 #condition the link
 def scrap(max_count=1000):
     global total_urls_visited
     total_urls_visited += 1
-    loops()
+    loops(merged_urls,internal_links,external_links)
     for i in range(len(internal_links)):
         if total_urls_visited > max_count:
             break 
@@ -101,4 +101,4 @@ if __name__ == '__main__':
     merge(soup)
     url1(boom)
     scrap()    
-    print(internal_links)
+
