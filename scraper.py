@@ -40,7 +40,7 @@ def url1(bundle):
 #hipper link collections
 def spli(lol):
     for link in lol.find_all('a'):
-        yield hipper.add(link.get('href'))
+        hipper.add(link.get('href'))
         
 
 #if base tag is available or add the domain to hipper link
@@ -63,7 +63,7 @@ def bef(r):
     b=BeautifulSoup(r, 'html.parser')
     spli(b)
     merge(b)
-    
+    return b
 #loop the process 
 thavaiillatha_onions=set()
 def loops(logs):
@@ -80,17 +80,18 @@ def loops(logs):
                 if ex_path.endswith(j) and ex_path.endswith('.pdf'):
                     thavaiillatha_onions.add(x)
     cop =set()
-    with ThreadPoolExecutor(max_workers=30) as executor:
+    with ThreadPoolExecutor(max_workers=10) as executor:
         for x in logs:
             if str(urlparse(x).netloc) in subdomains and str(x) not in thavaiillatha_onions:
                 cop.add(executor.submit(colec, x))
+                print(x)
     for r in as_completed(cop):
         url1(r.result())
         bef(r.result())
-        for x in logs:
-            if str(urlparse(x).netloc) in subdomains and str(x) not in thavaiillatha_onions:
-                print(x)
-                internal_links.add(x)
+        #for x in logs:
+         #   if str(urlparse(x).netloc) in subdomains and str(x) not in thavaiillatha_onions:
+                #print(x)
+          #      internal_links.add(x)
       #elif str(k) not in subdomains:
           #external_links.add(x)
     return logs

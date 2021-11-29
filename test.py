@@ -40,7 +40,7 @@ def url1(bundle):
 #hipper link collections
 def spli(lol):
     for link in lol.find_all('a'):
-        yield hipper.add(link.get('href'))
+        hipper.add(link.get('href'))
         
 
 #if base tag is available or add the domain to hipper link
@@ -63,7 +63,7 @@ def bef(r):
     b=BeautifulSoup(r, 'html.parser')
     spli(b)
     merge(b)
-    return r
+    return b
 #loop the process 
 thavaiillatha_onions=set()
 def loops(logs):
@@ -82,22 +82,26 @@ def loops(logs):
     cop =set()
     with ThreadPoolExecutor(max_workers=30) as executor:
         for x in logs:
-            if str(urlparse(x).netloc) in subdomains and str(x) not in thavaiillatha_onions:
+            if str(urlparse(x).netloc) in subdomains and str(x) not in thavaiillatha_onions and x not in internal_links:
                 cop.add(executor.submit(colec, x))
-    for r in as_completed(cop): 
-        url1(r.result())
-        bef(r.result())
-    for x in logs:
-        if str(urlparse(x).netloc) in subdomains and str(x) not in thavaiillatha_onions:
-            print(x)
-            internal_links.add(x) 
+                print(x)
+                internal_links.add(x)
+    with ThreadPoolExecutor(max_workers=30) as executor:
+        for r in as_completed(cop): 
+            print(len(cop))
+            executor.submit(url1(r.result()))
+            executor.submit(bef(r.result()))
+   # for x in logs:
+    #    if str(urlparse(x).netloc) in subdomains and str(x) not in thavaiillatha_onions:
+     #       print(x)
+      #       
     #elif str(k) not in subdomains:
         #external_links.add(x)
     return logs
 #    while internal_links:
 
 #condition the link
-def scrap(max_count=1000):
+def scrap(max_count=5):
     global total_urls_visited
     total_urls_visited += 1
     while max_count > 0:
