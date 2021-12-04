@@ -6,6 +6,8 @@ import json
 import mimetypes
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
+
+
 merged_urls=set() #x=[]
 internal_links=set()
 external_links=set()
@@ -80,17 +82,16 @@ def loops(logs):
                 if ex_path.endswith(j) and ex_path.endswith('.pdf'):
                     thavaiillatha_onions.add(x)
     cop =set()
-    with ThreadPoolExecutor(max_workers=30) as executor:
+    with ThreadPoolExecutor(max_workers=3) as executor:
         for x in logs:
             if str(urlparse(x).netloc) in subdomains and str(x) not in thavaiillatha_onions and x not in internal_links:
                 cop.add(executor.submit(colec, x))
-                print(x)
                 internal_links.add(x)
-    with ThreadPoolExecutor(max_workers=30) as executor:
+            else:
+                print(x)
         for r in as_completed(cop): 
-            print(len(cop))
-            executor.submit(url1(r.result()))
-            executor.submit(bef(r.result()))
+            executor.map(url1(r.result()))
+            executor.map(bef(r.result()))
    # for x in logs:
     #    if str(urlparse(x).netloc) in subdomains and str(x) not in thavaiillatha_onions:
      #       print(x)
@@ -116,5 +117,4 @@ if __name__ == '__main__':
     merge(soup)
     url1(boom)
     scrap()    
-
-
+    

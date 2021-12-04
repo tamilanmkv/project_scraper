@@ -1,10 +1,13 @@
 import re
+from urllib import parse
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 import json
 import mimetypes
 from concurrent.futures import ThreadPoolExecutor, as_completed
+
+
 
 merged_urls=set() #x=[]
 internal_links=set()
@@ -56,9 +59,9 @@ def merge(lol):
         for i in hipper.copy():
             if str(i).startswith("/"):
                 merged_urls.add(f"https://{domain}"+i)
-            
+
 def colec(x):
-    return requests.get(x,cookies).text
+    return requests.get(x,cookies).text      
 def bef(r):
     b=BeautifulSoup(r, 'html.parser')
     spli(b)
@@ -80,34 +83,58 @@ def loops(logs):
                 if ex_path.endswith(j) and ex_path.endswith('.pdf'):
                     thavaiillatha_onions.add(x)
     cop =set()
-    with ThreadPoolExecutor(max_workers=10) as executor:
+    with ThreadPoolExecutor(max_workers=3) as executor:
         for x in logs:
-            if str(urlparse(x).netloc) in subdomains and str(x) not in thavaiillatha_onions:
+            if str(urlparse(x).netloc) in subdomains and str(x) not in thavaiillatha_onions and x not in internal_links:
                 cop.add(executor.submit(colec, x))
-                print(x)
-    for r in as_completed(cop):
-        url1(r.result())
-        bef(r.result())
-        #for x in logs:
-         #   if str(urlparse(x).netloc) in subdomains and str(x) not in thavaiillatha_onions:
-                #print(x)
-          #      internal_links.add(x)
-      #elif str(k) not in subdomains:
-          #external_links.add(x)
+                internal_links.add(x)
+            else:
+                external_links.add(x)
+                with open(f"{domain}_external_links.txt","w") as f:
+                    print(x.strip(), file=f)
+        for r in as_completed(cop):
+            r = r.result()
+            executor.map(url1(r))
+            executor.map(bef(r))
+   # for x in logs:
+    #    if str(urlparse(x).netloc) in subdomains and str(x) not in thavaiillatha_onions:
+     #       print(x)
+      #       
+    #elif str(k) not in subdomains:
+        #external_links.add(x)
     return logs
+#    while internal_links:
 
 #condition the link
-def scrap(max_count=1000):
+def scrap(max_count=5):
     global total_urls_visited
     total_urls_visited += 1
+    loops(merged_urls)
+    with open(f"{domain}_internal_links.txt","w") as f:
+        for internal_link in internal_links:
+            print(internal_link.strip(), file=f)
+    with open(f"{domain}_external_links.txt","w") as f:
+        for external_link in external_links:
+            print(external_link.strip(), file=f)
     while max_count > 0:
-        loops(merged_urls)
         max_count -=1
-
+        scrap(max_count)
+               
 if __name__ == '__main__':
-    domain="hackerone.com"
-    req = colec(f"https://{domain}/")
-    bef(req)
-    print(merged_urls)
-    scrap()    
-
+    import argparse
+    parse = argparse.ArgumentParser(description="Link Scraper Tool with Python")
+    parse.add_argument('domain', help="The main domain name .")
+    parse.add_argument("-m",'--max_count',help="Max number of page want to scrap", default=10, type=int)
+    args= parse.parse_args()
+    domain = args.domain
+    max_count = args.max_count
+    de = colec(f"https://{domain}/")
+    url1(de)
+    bef(de)
+    #boom = requests.get(f"https://{domain}/").text
+    #soup = BeautifulSoup(boom, 'html.parser')
+    #spli(soup)
+    #merge(soup)
+    #url1(boom)
+    scrap(max_count=max_count)   
+    print(internal_links)
