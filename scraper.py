@@ -90,7 +90,7 @@ def loops(logs):
                 internal_links.add(x)
             else:
                 external_links.add(x)
-                with open(f"{domain}_external_links.txt","w") as f:
+                with open(f"{domain}_external_links.txt","a") as f:
                     print(x.strip(), file=f)
         for r in as_completed(cop):
             r = r.result()
@@ -110,7 +110,7 @@ def scrap(max_count=5):
     global total_urls_visited
     total_urls_visited += 1
     loops(merged_urls)
-    with open(f"{domain}_internal_links.txt","w") as f:
+    with open(f"{domain}_internal_links.txt","a") as f:
         for internal_link in internal_links:
             print(internal_link.strip(), file=f)
     with open(f"{domain}_external_links.txt","w") as f:
