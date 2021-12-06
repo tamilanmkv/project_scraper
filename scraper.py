@@ -1,5 +1,4 @@
 import re
-from urllib import parse
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
@@ -63,6 +62,7 @@ def merge(lol):
 def colec(x):
     return requests.get(x,cookies).text      
 def bef(r):
+    url1(r)
     b=BeautifulSoup(r, 'html.parser')
     spli(b)
     merge(b)
@@ -88,53 +88,46 @@ def loops(logs):
             if str(urlparse(x).netloc) in subdomains and str(x) not in thavaiillatha_onions and x not in internal_links:
                 cop.add(executor.submit(colec, x))
                 internal_links.add(x)
+                with open(f"{domain}_internal_links.txt","a") as f:
+                    print(x.strip(), file=f)
             else:
                 external_links.add(x)
                 with open(f"{domain}_external_links.txt","a") as f:
                     print(x.strip(), file=f)
         for r in as_completed(cop):
             r = r.result()
-            executor.map(url1(r))
             executor.map(bef(r))
-   # for x in logs:
-    #    if str(urlparse(x).netloc) in subdomains and str(x) not in thavaiillatha_onions:
-     #       print(x)
-      #       
-    #elif str(k) not in subdomains:
-        #external_links.add(x)
     return logs
-#    while internal_links:
 
 #condition the link
 def scrap(max_count=5):
     global total_urls_visited
     total_urls_visited += 1
-    loops(merged_urls)
-    with open(f"{domain}_internal_links.txt","a") as f:
-        for internal_link in internal_links:
-            print(internal_link.strip(), file=f)
-    with open(f"{domain}_external_links.txt","w") as f:
-        for external_link in external_links:
-            print(external_link.strip(), file=f)
     while max_count > 0:
         max_count -=1
-        scrap(max_count)
+        loops(merged_urls)
                
 if __name__ == '__main__':
+#    domain = "hackerone.com"
+    import os
     import argparse
     parse = argparse.ArgumentParser(description="Link Scraper Tool with Python")
     parse.add_argument('domain', help="The main domain name .")
     parse.add_argument("-m",'--max_count',help="Max number of page want to scrap", default=10, type=int)
+    parse.add_argument('-l','--links',help="old scraped links dont scrap again same word",default=f"{domain}_internal_links.txt",type=str )
     args= parse.parse_args()
-    domain = args.domain
+    domain  = args.domain
+    if os.path.isfile(f'{domain}_internal_links.txt"'):
+        with open(f'{domain}_internal_links.txt') as f:
+            for fil in f:
+                internal_links.add(fil)
+    else:
+        with open(args.files) as f:
+            for fil in f:
+                internal_links.add(fil)            
+
     max_count = args.max_count
     de = colec(f"https://{domain}/")
-    url1(de)
     bef(de)
-    #boom = requests.get(f"https://{domain}/").text
-    #soup = BeautifulSoup(boom, 'html.parser')
-    #spli(soup)
-    #merge(soup)
-    #url1(boom)
-    scrap(max_count=max_count)   
+    scrap()
     print(internal_links)
