@@ -90,8 +90,8 @@ def loops(logs):
             else:
                 print(x)
         for r in as_completed(cop): 
-            executor.map(url1(r.result()))
-            executor.map(bef(r.result()))
+            url1(r.result())
+            bef(r.result())
    # for x in logs:
     #    if str(urlparse(x).netloc) in subdomains and str(x) not in thavaiillatha_onions:
      #       print(x)
