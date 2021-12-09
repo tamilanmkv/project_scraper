@@ -87,6 +87,7 @@ def loops(logs):
             if str(urlparse(x).netloc) in subdomains and str(x) not in thavaiillatha_onions and x not in internal_links:
                 cop.add(executor.submit(colec, x))
                 internal_links.add(x)
+                
             else:
                 print(x)
         for r in as_completed(cop): 

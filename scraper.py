@@ -17,13 +17,6 @@ hipper=set()
 total_urls_visited=0
 
 
-with open('domains.txt') as f:
-    for i in f:
-        subdomains.add(i.strip('\n'))
-with open('cookie.json') as c: 
-    for i in json.loads(c.read()):
-        cookies.update(i)
-        break
 
 #all unknow extentions
 def extern(types):
@@ -85,7 +78,7 @@ def loops(logs):
                     thavaiillatha_onions.add(x)
                     with open('imagesFiles.txt','a') as f:
                         print(x.strip(), file=f)
-                elif ex_path.endswith(".js") or ex_path.endswith(""):
+                elif ex_path.endswith(".js") or ex_path.endswith("js.map"):
                     with open('javascriptFiles.txt','a') as f:
                         print(x.strip(), file=f)
     cop =set()
@@ -122,6 +115,8 @@ if __name__ == '__main__':
     parser.add_argument('domain', help="The main domain name .")
     parser.add_argument("-m",'--max_count',help="Max number of page want to scrap", default=10, type=int)  
     parser.add_argument('-l','--links',help="old scraped links dont scrap again same word",required=False) 
+    parser.add_argument('-s',"--sub",help="subdomains of your domains",required=True)
+    parser.add_argument('-c',"--cookie",help="use cookie editor to export the cookie save *.json format",required=False,default=0) 
     args= parser.parse_args()
     domain  = args.domain
     files = str(args.links)   
@@ -130,10 +125,17 @@ if __name__ == '__main__':
             with open(files) as f:
                 for fil in f:
                     internal_links.add(fil)
-    else:
-        with open(files)as f:
-            for fil in f:
-                internal_links.add(fil)            
+    
+    sub = str(args.sub)
+    if len(sub) > 0:
+        with open(sub) as f:
+            for i in f:
+                subdomains.add(i.strip('\n'))
+    if args.cookie:
+        with open(args.cookie) as c: 
+            for i in json.loads(c.read()):
+                cookies.update(i)
+                break
 
     max_count = args.max_count
     de = colec(f"https://{domain}/")
