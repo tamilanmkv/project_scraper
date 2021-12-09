@@ -115,20 +115,19 @@ if __name__ == '__main__':
     parser.add_argument('domain', help="The main domain name .")
     parser.add_argument("-m",'--max_count',help="Max number of page want to scrap", default=10, type=int)  
     parser.add_argument('-l','--links',help="old scraped links dont scrap again same word",required=False) 
-    parser.add_argument('-s',"--sub",help="subdomains of your domains",required=True)
-    parser.add_argument('-c',"--cookie",help="use cookie editor to export the cookie save *.json format",required=False,default=0) 
+    parser.add_argument('-s',"--subdomain",help="subdomains of your domains",required=True)
+    parser.add_argument('-c',"--cookie",help="use cookie editor to export the cookie save *.json format",required=False) 
     args= parser.parse_args()
     domain  = args.domain
     files = str(args.links)   
-    if len(files) > 0:
-        if os.path.isfile(files):
-            with open(files) as f:
+    if args.links:
+        if os.path.isfile(args.links):
+            with open(args.links) as f:
                 for fil in f:
                     internal_links.add(fil)
     
-    sub = str(args.sub)
-    if len(sub) > 0:
-        with open(sub) as f:
+    if args.subdomain:
+        with open(args.subdomain) as f:
             for i in f:
                 subdomains.add(i.strip('\n'))
     if args.cookie:
